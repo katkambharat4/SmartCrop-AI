@@ -1,0 +1,2 @@
+# Placeholder to preserve the database directory structure in Git
+# SQLite smartcrop.db is generated automatically by app.py at runtime

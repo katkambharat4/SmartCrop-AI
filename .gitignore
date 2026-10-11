@@ -1,0 +1,42 @@
+# Python virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite Database files (generated at runtime, contains user session & transient testing rows)
+*.db
+*.sqlite3
+database/*.db
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Pytest / coverage test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log

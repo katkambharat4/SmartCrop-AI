@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Dashboard – SmartCrop AI{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Banner -->
+    <div class="dashboard-hero">
+        <h1 class="dashboard-greeting">Welcome, {{ farmer_name }}!</h1>
+        <p class="dashboard-subgreeting">
+            Manage your agricultural predictions, test new soil parameters, and view your historical crop recommendations.
+        </p>
+        <div class="dashboard-stats-row">
+            <div class="dashboard-stat-badge">
+                <span>📊 Total Predictions Saved:</span>
+                <strong>{{ total_predictions }}</strong>
+            </div>
+            {% if latest_prediction %}
+            <div class="dashboard-stat-badge">
+                <span>🌾 Latest Recommendation:</span>
+                <strong>{{ latest_prediction.recommended_crop }}</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 4 Main Action Cards -->
+    <div class="dashboard-grid">
+        <!-- Card 1: New Prediction -->
+        <a href="{{ url_for('predict') }}" class="dashboard-action-card">
+            <span class="action-card-icon">🌱</span>
+            <h3 class="action-card-title">New Prediction</h3>
+            <p class="action-card-desc">
+                Input soil N-P-K levels and environmental parameters to get a tailored ML crop recommendation.
+            </p>
+        </a>
+
+        <!-- Card 2: Prediction History -->
+        <a href="{{ url_for('history') }}" class="dashboard-action-card">
+            <span class="action-card-icon">📜</span>
+            <h3 class="action-card-title">Prediction History</h3>
+            <p class="action-card-desc">
+                View your previous soil analysis records, historical crop suggestions, and detailed test parameters.
+            </p>
+        </a>
+
+        <!-- Card 3: My Profile -->
+        <a href="{{ url_for('profile') }}" class="dashboard-action-card">
+            <span class="action-card-icon">👤</span>
+            <h3 class="action-card-title">My Profile</h3>
+            <p class="action-card-desc">
+                View your registered farmer account details, verified email address, and account creation date.
+            </p>
+        </a>
+
+        <!-- Card 4: Logout -->
+        <a href="{{ url_for('logout') }}" class="dashboard-action-card">
+            <span class="action-card-icon">🚪</span>
+            <h3 class="action-card-title">Logout</h3>
+            <p class="action-card-desc">
+                Safely sign out of your farmer account and close your active session on this device.
+            </p>
+        </a>
+    </div>
+</div>
+{% endblock %}

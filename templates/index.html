@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}SmartCrop AI – AI-Based Smart Crop Recommendation System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-badge">B.Tech Computer Science Project &bull; Machine Learning</div>
+    <h1 class="hero-title">SmartCrop AI</h1>
+    <h2 class="hero-subtitle">AI-Based Smart Crop Recommendation System</h2>
+    <p class="hero-desc">
+        SmartCrop AI uses machine learning to recommend a suitable crop based on agricultural and environmental conditions.
+    </p>
+    <div class="hero-actions">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary">
+            <span>🌾 Start Prediction</span>
+        </a>
+    </div>
+</section>
+
+<!-- 4 Core Feature Cards -->
+<section class="features-grid">
+    <div class="feature-card">
+        <div class="feature-icon">🌾</div>
+        <h3 class="feature-title">AI Crop Recommendation</h3>
+        <p class="feature-text">
+            Generates dynamic, data-driven crop suggestions across 22 major agricultural crop classes to assist cultivation planning.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h3 class="feature-title">Agricultural Input Analysis</h3>
+        <p class="feature-text">
+            Evaluates soil macronutrients (Nitrogen, Phosphorus, Potassium) alongside key environmental factors (temperature, humidity, and rainfall).
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">🌲</div>
+        <h3 class="feature-title">Random Forest Machine Learning</h3>
+        <p class="feature-text">
+            Powered by a verified 100-tree Random Forest Classifier trained on empirical agricultural benchmark records with 99.09% test accuracy.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">🤝</div>
+        <h3 class="feature-title">Farmer-Friendly Decision Support</h3>
+        <p class="feature-text">
+            Simple, accessible web interface with zero login requirements, clear parameter guidance, printable summaries, and advisory disclaimers.
+        </p>
+    </div>
+</section>
+
+<!-- How It Works Workflow -->
+<section class="workflow-box">
+    <div class="workflow-header">
+        <h3>How It Works</h3>
+        <p class="section-subtext">The end-to-end data processing and machine learning workflow:</p>
+    </div>
+    <div class="workflow-steps workflow-steps-expanded">
+        <div class="step-item">
+            <div class="step-number">Step 1</div>
+            <div class="step-label">Location / Field Info</div>
+            <p class="step-desc">Optional GPS or manual location captured for field reporting context.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-item">
+            <div class="step-number">Step 2</div>
+            <div class="step-label">Agricultural Inputs</div>
+            <p class="step-desc">User enters soil NPK ratios and environmental temperature, humidity, rainfall, and season.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-item">
+            <div class="step-number">Step 3</div>
+            <div class="step-label">Input Validation</div>
+            <p class="step-desc">Client and server verify reasonable numerical boundaries (e.g. humidity 0-100%).</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-item">
+            <div class="step-number">Step 4</div>
+            <div class="step-label">Preprocessing</div>
+            <p class="step-desc">Features arranged into the exact order expected by the trained model.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-item">
+            <div class="step-number">Step 5</div>
+            <div class="step-label">Random Forest Model</div>
+            <p class="step-desc">Ensemble of 100 decision trees performs multi-class classification.</p>
+        </div>
+        <div class="step-arrow">&rarr;</div>
+        <div class="step-item">
+            <div class="step-number">Step 6</div>
+            <div class="step-label">Crop Recommendation</div>
+            <p class="step-desc">Results displayed with input summary, feature importances, and agronomic profile.</p>
+        </div>
+    </div>
+    <p class="workflow-context-note">
+        ℹ️ <em>Architecture Note:</em> Field location and season are contextual metadata. <strong>The existing Random Forest model is trained strictly on the 6 verified features:</strong> Nitrogen (N), Phosphorus (P), Potassium (K), Temperature, Humidity, and Rainfall.
+    </p>
+</section>
+
+<!-- Information Panels Grid -->
+<section class="info-sections-grid">
+    <!-- Where Do Input Values Come From? -->
+    <div class="info-card">
+        <div class="info-card-header">
+            <span class="info-icon">📋</span>
+            <h3>Where Do Input Values Come From?</h3>
+        </div>
+        <ul class="info-list">
+            <li><strong>Soil Nutrients (N, P, K):</strong> From a laboratory soil test or your government <em>Soil Health Card</em>. Never guess soil nutrient values.</li>
+            <li><strong>Temperature:</strong> From local meteorological reports or local thermometer readings.</li>
+            <li><strong>Relative Humidity:</strong> From local weather bulletins or hygrometer data.</li>
+            <li><strong>Rainfall:</strong> From local seasonal rainfall data or agricultural department bulletins.</li>
+            <li><strong>Cultivation Season:</strong> Your planned agricultural cropping window (Kharif, Rabi, or Zaid).</li>
+        </ul>
+        <div class="notice-pill">
+            ⚠️ Entering a location does not automatically measure or fabricate soil N/P/K values.
+        </div>
+    </div>
+
+    <!-- Who Can Use SmartCrop AI? -->
+    <div class="info-card">
+        <div class="info-card-header">
+            <span class="info-icon">👥</span>
+            <h3>Who Can Use SmartCrop AI?</h3>
+        </div>
+        <p class="info-text">
+            SmartCrop AI is built with barrier-free access in mind:
+        </p>
+        <ul class="info-list">
+            <li><strong>Individual Farmers:</strong> Any farmer with a smartphone, tablet, or PC can enter their values directly.</li>
+            <li><strong>Assisted Access:</strong> If a farmer does not own a smartphone, an <em>agriculture extension officer</em>, <em>village field worker</em>, family member, or <em>Common Service Center (CSC / KVK)</em> can enter the field values on the farmer's behalf.</li>
+            <li><strong>Students & Researchers:</strong> Useful for agricultural science and machine learning demonstrations.</li>
+        </ul>
+        <div class="notice-pill notice-pill-success">
+            ✨ No smartphone required for every farmer. No login or registration needed.
+        </div>
+    </div>
+</section>
+
+<!-- Real-World Limitations & Academic Context -->
+<section class="limitations-box">
+    <div class="limitations-header">
+        <span class="limitations-icon">⚠️</span>
+        <h3>Important Real-World Limitations</h3>
+    </div>
+    <ul class="limitations-list">
+        <li><strong>User-Provided Inputs:</strong> SmartCrop AI currently relies on user-provided values. The current version does not connect to real-time IoT hardware.</li>
+        <li><strong>No Automated Nutrient Sensing:</strong> Field location does not automatically determine soil N, P, or K. Soil test records must be used.</li>
+        <li><strong>Soil Moisture:</strong> The model does not use soil moisture because it was not an available feature in the benchmark dataset.</li>
+        <li><strong>Decision-Support Advisory:</strong> Recommendations are advisory and do not guarantee cultivation outcomes. Microclimatic and market factors should be considered before final planting.</li>
+    </ul>
+</section>
+
+<!-- About Project Section -->
+<section class="about-project-box">
+    <h3>About SmartCrop AI</h3>
+    <p>
+        SmartCrop AI was developed as a B.Tech Computer Science capstone project focusing on applied Machine Learning in precision agriculture. The project emphasizes transparent classification, reproducible ML pipelines, dual-tier input validation, and farmer-accessible web technologies without unnecessary cloud or database complexity.
+    </p>
+</section>
+{% endblock %}

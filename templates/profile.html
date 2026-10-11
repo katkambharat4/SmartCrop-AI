@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile – SmartCrop AI{% endblock %}
+
+{% block content %}
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-avatar">👨‍🌾</div>
+            <h1 class="profile-name">{{ user.name }}</h1>
+            <p class="profile-meta">Registered Farmer Account</p>
+        </div>
+
+        <div class="profile-details-grid">
+            <div class="profile-item">
+                <span class="profile-label">Full Name</span>
+                <span class="profile-val">{{ user.name }}</span>
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Email Address</span>
+                <span class="profile-val">{{ user.email }}</span>
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Member Since</span>
+                <span class="profile-val">{{ user.created_at }}</span>
+            </div>
+
+            <div class="profile-item">
+                <span class="profile-label">Total Predictions</span>
+                <span class="profile-val">{{ total_predictions }} Saved</span>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                <span>🌾 Go to Dashboard</span>
+            </a>
+            <a href="{{ url_for('history') }}" class="btn btn-outline">
+                <span>📜 View History</span>
+            </a>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline" style="color: #c62828; border-color: #ef9a9a;">
+                <span>🚪 Logout</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}My Prediction History – SmartCrop AI{% endblock %}
+
+{% block content %}
+<div class="history-container">
+    <div class="history-header">
+        <div>
+            <h1 class="history-title">📜 My Prediction History</h1>
+            <p class="section-subtext">Record of all your saved crop recommendations and agricultural input conditions.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('predict') }}" class="btn btn-primary btn-sm">
+                <span>➕ New Prediction</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="history-card">
+        {% if predictions and predictions | length > 0 %}
+        <div class="table-responsive">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date &amp; Time</th>
+                        <th>Recommended Crop</th>
+                        <th>Location</th>
+                        <th>N</th>
+                        <th>P</th>
+                        <th>K</th>
+                        <th>Temp (°C)</th>
+                        <th>Humidity (%)</th>
+                        <th>Rainfall (mm)</th>
+                        <th>Season</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions %}
+                    <tr>
+                        <td>
+                            <span class="date-text">{{ pred.created_at }}</span>
+                        </td>
+                        <td>
+                            <span class="crop-tag">{{ pred.recommended_crop }}</span>
+                        </td>
+                        <td>
+                            {% if pred.location %}
+                                {{ pred.location }}
+                            {% else %}
+                                <em style="color: #888;">—</em>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ pred.N }}</strong></td>
+                        <td><strong>{{ pred.P }}</strong></td>
+                        <td><strong>{{ pred.K }}</strong></td>
+                        <td>{{ pred.temperature }}</td>
+                        <td>{{ pred.humidity }}</td>
+                        <td>{{ pred.rainfall }}</td>
+                        <td>{{ pred.season or '—' }}</td>
+                        <td>
+                            <a href="{{ url_for('prediction_detail', prediction_id=pred.id) }}" class="btn btn-outline btn-sm">
+                                View Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="history-empty">
+            <div class="history-empty-icon">🌾</div>
+            <h3 class="history-empty-title">No Saved Predictions Yet</h3>
+            <p style="margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+                You haven't generated any crop recommendations under your account yet. Run your first soil assessment now!
+            </p>
+            <a href="{{ url_for('predict') }}" class="btn btn-primary">
+                <span>🌱 Start Your First Prediction</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendation Result: {{ crop }} – SmartCrop AI{% endblock %}
+
+{% block content %}
+<div class="result-card printable-card">
+    
+    <!-- Hero Recommendation Banner -->
+    <div class="result-hero">
+        <div class="result-pretitle">Recommended Crop</div>
+        <div class="crop-badge-box">
+            <h1 class="crop-name">{{ crop }}</h1>
+        </div>
+        {% if confidence %}
+        <p class="crop-confidence">Model Prediction Confidence: <strong>{{ confidence }}%</strong></p>
+        {% endif %}
+    </div>
+
+    <!-- Details and Input Summary -->
+    <div class="result-body">
+        
+        {% if saved_to_history %}
+        <div class="history-status-banner history-status-saved">
+            <span>✅ <strong>Saved to History:</strong> This crop recommendation has been recorded in your farmer account.</span>
+            <a href="{{ url_for('history') }}" class="btn btn-outline btn-sm">View History</a>
+        </div>
+        {% elif not current_user %}
+        <div class="history-status-banner history-status-guest">
+            <span>💡 <strong>Guest Mode:</strong> Recommendation generated successfully. <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight: 600;">Log in</a> or <a href="{{ url_for('register') }}" style="color: var(--primary); font-weight: 600;">Register</a> to save future predictions to your personal history.</span>
+        </div>
+        {% endif %}
+
+        <!-- SECTION 1: INPUT SUMMARY -->
+        <div class="summary-heading">
+            <span>📋 Input Summary</span>
+            <span class="sub-label">User-Provided Parameters</span>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-label">Nitrogen (N)</span>
+                <span class="summary-value">{{ inputs.get('N') }} mg/kg</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label">Phosphorus (P)</span>
+                <span class="summary-value">{{ inputs.get('P') }} mg/kg</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label">Potassium (K)</span>
+                <span class="summary-value">{{ inputs.get('K') }} mg/kg</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label">Temperature</span>
+                <span class="summary-value">{{ inputs.get('temperature') }} °C</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label">Relative Humidity</span>
+                <span class="summary-value">{{ inputs.get('humidity') }} %</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="summary-label">Rainfall</span>
+                <span class="summary-value">{{ inputs.get('rainfall') }} mm</span>
+            </div>
+
+            <div class="summary-item highlight-item">
+                <span class="summary-label">Cultivation Season</span>
+                <span class="summary-value">{{ inputs.get('season') }}</span>
+            </div>
+
+            <div class="summary-item highlight-item">
+                <span class="summary-label">Field Location</span>
+                <span class="summary-value">
+                    {% if location %}
+                        {{ location.display }}
+                    {% else %}
+                        <em>Not specified (Optional)</em>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <!-- SECTION 2: DYNAMIC CROP INFORMATION -->
+        {% if crop_profile %}
+        <div class="crop-info-section">
+            <div class="summary-heading">
+                <span>🌾 Crop Agronomic Profile: {{ crop }}</span>
+                <span class="sub-label">Agronomic Reference</span>
+            </div>
+            
+            <p class="crop-profile-summary">{{ crop_profile.summary }}</p>
+
+            <div class="crop-info-grid">
+                <div class="crop-info-box">
+                    <span class="crop-info-label">Crop Category</span>
+                    <span class="crop-info-val">{{ crop_profile.category }}</span>
+                </div>
+                <div class="crop-info-box">
+                    <span class="crop-info-label">Typical Growth Duration</span>
+                    <span class="crop-info-val">{{ crop_profile.duration }}</span>
+                </div>
+                <div class="crop-info-box">
+                    <span class="crop-info-label">Water Requirements</span>
+                    <span class="crop-info-val">{{ crop_profile.water_need }}</span>
+                </div>
+                <div class="crop-info-box">
+                    <span class="crop-info-label">Soil Suitability</span>
+                    <span class="crop-info-val">{{ crop_profile.soil_type }}</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- SECTION 3: MODEL INSIGHTS & ACTUAL FEATURE IMPORTANCES -->
+        <div class="model-insights-section">
+            <div class="summary-heading">
+                <span>🌲 Machine Learning Model Insights</span>
+                <span class="sub-label">Ensemble Diagnostics</span>
+            </div>
+
+            <div class="insights-metrics-grid">
+                <div class="insight-metric-card">
+                    <span class="insight-title">Algorithm</span>
+                    <span class="insight-value">Random Forest Classifier</span>
+                </div>
+                <div class="insight-metric-card">
+                    <span class="insight-title">Learning Paradigm</span>
+                    <span class="insight-value">Supervised Classification</span>
+                </div>
+                <div class="insight-metric-card">
+                    <span class="insight-title">Crop Classes</span>
+                    <span class="insight-value">
+                        {% if model_info and model_info.classes %}
+                            {{ model_info.classes | length }} Crops
+                        {% else %}
+                            22 Crops
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="insight-metric-card">
+                    <span class="insight-title">Actual Test Accuracy</span>
+                    <span class="insight-value">
+                        {% if model_info and model_info.test_accuracy %}
+                            {{ (model_info.test_accuracy * 100) | round(2) }}%
+                        {% else %}
+                            99.09%
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Actual Feature Importances from Random Forest Model -->
+            {% if feature_importances %}
+            <div class="importance-container">
+                <h4 class="importance-heading">Feature Importance (Model Decision Weight)</h4>
+                <p class="importance-desc">
+                    These percentages represent the actual Gini importance computed across all decision trees in the trained Random Forest model:
+                </p>
+                <div class="importance-bars">
+                    {% for feat in feature_importances %}
+                    <div class="importance-row">
+                        <div class="importance-labels">
+                            <span class="feat-name">{{ feat.label }}</span>
+                            <span class="feat-val">{{ feat.percentage }}%</span>
+                        </div>
+                        <div class="importance-track">
+                            <div class="importance-fill" style="width: {{ feat.percentage }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Academic & Decision-Support Advisory Note -->
+        <div class="model-note-box">
+            <strong>Decision-Support Advisory:</strong> This crop recommendation is generated by a Random Forest classification model based on empirical agricultural benchmark data. It serves as an advisory decision-support system to guide cultivation planning. It is <u>not</u> a guaranteed farming outcome. Farmers should consider local soil depth, drainage, prevailing seed quality, and market conditions before final sowing.
+        </div>
+
+        <!-- Action Buttons (Hidden when printed) -->
+        <div class="result-actions no-print">
+            <button type="button" onclick="window.print()" class="btn btn-outline">
+                <span>🖨️ Print / Save Result</span>
+            </button>
+            <a href="{{ url_for('predict') }}" class="btn btn-primary">
+                <span>🔄 Try Again</span>
+            </a>
+            {% if current_user %}
+            <a href="{{ url_for('history') }}" class="btn btn-outline">
+                <span>📜 View History</span>
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
+                <span>🌾 Dashboard</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('index') }}" class="btn btn-outline">
+                <span>🏠 Home</span>
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Login – SmartCrop AI{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <span class="auth-icon">🔐</span>
+            <h1 class="auth-title">Farmer Login</h1>
+            <p class="auth-subtitle">Access your personal dashboard and crop recommendation history.</p>
+        </div>
+
+        {% if error %}
+        <div class="alert-box" style="margin-bottom: 1.5rem;">
+            <div class="alert-title">⚠️ Authentication Error</div>
+            <p style="margin: 0; font-size: 0.95rem;">{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('login') }}" method="POST" novalidate>
+            <div class="form-group" style="margin-bottom: 1.2rem;">
+                <label for="email" class="form-label">
+                    <span>Email Address</span>
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="e.g. farmer@example.com" 
+                    value="{{ email or '' }}" 
+                    required 
+                    autofocus
+                >
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.8rem;">
+                <label for="password" class="form-label">
+                    <span>Password</span>
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Enter your password" 
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <span>🌾 Sign In to Dashboard</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Don't have an account yet? <a href="{{ url_for('register') }}">Register here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

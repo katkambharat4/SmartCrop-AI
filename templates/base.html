@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartCrop AI – AI-Based Smart Crop Recommendation System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span class="brand-icon">🌱</span>
+                <span>SmartCrop AI</span>
+                <span class="brand-sub">ML System</span>
+            </a>
+            <nav class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
+                {% if current_user %}
+                    <a href="{{ url_for('predict') }}" class="nav-link {% if request.path == '/predict' %}active{% endif %}">New Prediction</a>
+                    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                    <a href="{{ url_for('history') }}" class="nav-link {% if request.path.startswith('/history') %}active{% endif %}">History</a>
+                    <a href="{{ url_for('profile') }}" class="nav-link {% if request.path == '/profile' %}active{% endif %}">Profile</a>
+                    <a href="{{ url_for('logout') }}" class="nav-link nav-btn-logout">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('predict') }}" class="nav-link nav-btn {% if request.path == '/predict' %}active{% endif %}">Recommend Crop</a>
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.path == '/login' %}active{% endif %}">Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-link {% if request.path == '/register' %}active{% endif %}">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Notification Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="flash-alert {{ category if category != 'message' else 'info' }}">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Project Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>SmartCrop AI</strong> – AI-Based Smart Crop Recommendation System</p>
+            <p class="footer-academic">Supervised Machine Learning &bull; Random Forest Classifier &bull; Decision-Support System</p>
+            <p class="footer-academic">&copy; B.Tech Computer Science Project</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
