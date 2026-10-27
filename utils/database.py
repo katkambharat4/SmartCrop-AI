@@ -1,10 +1,11 @@
 import os
 import sqlite3
 
-# Resolve absolute path to database/smartcrop.db
+# Resolve absolute path to database/smartcrop.db (can be overridden by SQLITE_DB_PATH for persistent disks)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_DIR = os.path.join(BASE_DIR, "database")
-DB_PATH = os.path.join(DB_DIR, "smartcrop.db")
+DEFAULT_DB_PATH = os.path.join(DB_DIR, "smartcrop.db")
+DB_PATH = os.environ.get("SQLITE_DB_PATH", DEFAULT_DB_PATH)
 
 
 def get_db_connection(db_path=None):

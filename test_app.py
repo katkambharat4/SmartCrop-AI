@@ -185,6 +185,12 @@ class SmartCropAITestCase(unittest.TestCase):
     def test_12_registration_workflow(self):
         """5, 7, 8: Test farmer registration with password confirmation and hashing."""
         unique_email = "farmer_test12@example.com"
+        # Ensure test isolation if database persisted from a previous run
+        conn = get_db_connection()
+        conn.execute("DELETE FROM users WHERE email = ?", (unique_email,))
+        conn.commit()
+        conn.close()
+
         reg_payload = {
             "name": "Kisan Bhai",
             "email": unique_email,

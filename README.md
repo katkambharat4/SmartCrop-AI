@@ -273,6 +273,46 @@ python test_app.py
 
 ---
 
+## 17. Deploying to Render (Cloud Production)
+
+SmartCrop AI is configured for one-click or Git-driven deployment on [Render](https://render.com/).
+
+### Deployment Configuration
+The repository includes production deployment configurations:
+- **`render.yaml`**: Infrastructure blueprint defining the web service, build command, start command, and environment variables.
+- **`Procfile`**: Standard PaaS WSGI process declaration:
+  ```text
+  web: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+  ```
+- **`.python-version`**: Pinned to stable `3.11.9` for guaranteed binary compatibility with scikit-learn, numpy, and scipy.
+
+### Steps to Deploy on Render:
+1. Log in to [Render Dashboard](https://dashboard.render.com/).
+2. Click **New +** > **Web Service**.
+3. Connect your GitHub repository: `https://github.com/katkambharat4/SmartCrop-AI`.
+4. Configure the service settings:
+   - **Name**: `smartcrop-ai`
+   - **Language / Runtime**: `Python 3`
+   - **Region**: Closest to your target users (e.g., Singapore, Frankfurt, Oregon)
+   - **Branch**: `main`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
+5. Set Environment Variables under **Advanced**:
+   - `PYTHON_VERSION`: `3.11.9`
+   - `SECRET_KEY`: *[Generate a secure random string or leave Render to autogenerate]*
+   - `HOST`: `0.0.0.0`
+6. Click **Create Web Service**. Render will automatically build the dependencies, load the serialized model, and bind the application to the assigned HTTPS URL.
+
+### SQLite Storage on Render Notice
+- **Default Ephemeral Disk**: By default on Render's free tier, the local filesystem is ephemeral. If the service restarts or redeploys, newly created user accounts and history entries stored in the default `database/smartcrop.db` will reset.
+- **Persistent Storage**: To persist farmer accounts and prediction logs permanently across restarts on Render, attach a **Persistent Disk** (e.g. mounted at `/var/data`) and set the environment variable:
+  ```text
+  SQLITE_DB_PATH=/var/data/smartcrop.db
+  ```
+- Alternatively, for production scaling, migrate the database connection to a managed PostgreSQL instance (e.g., Render Managed Postgres or Supabase).
+
+---
+
 ## 17. Example Usage
 
 ### Example 1: Rice Conditions
